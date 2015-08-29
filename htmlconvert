@@ -1,0 +1,174 @@
+#!/usr/bin/ruby
+
+def help
+puts <<HELPTEXT
+
+  htmlconvert converts html documents to the following formats:
+  plain text, formatted text, latex, ps, pdf
+
+  This program requires the following to be installed on your system:
+  Ruby as well as the utilities html2text, html2ps, ps2pdf and
+  gnuhtml2latex.
+  
+  These utilities do the actual work; htmlconvert simply gives a common 
+  interface to all of them. It also makes it possible to convert several
+  html documents to various formats all in one fell swoop.
+
+  SYNOPSIS: 
+
+    htmlconvert [OPTION] [FORMAT] [URL] [OPTION] [FORMAT] [URL]...
+
+  OPTIONS:
+  
+    -h
+      displays the helpfile
+
+    -d
+      delete the downloaded html-file to be converted (default)
+
+    -k
+      keep the downloaded html-file to be converted
+
+  FORMATS:
+
+    txt
+      convert the html file to plain text (default)
+
+    text
+      convert the html file to formatted text (for viewing with less and more)
+
+    latex
+      convert the html file to latex
+
+    ps
+      convert the html file to postscript
+
+    pdf
+      convert the html file to pdf
+      
+  EXAMPLES:
+  
+    By following the synopsis, one could simply convert my homepage to
+text:
+    'htmlconvert www.geir.isene.com/index.php'
+
+    Or a more complex use could be:
+    'htmlconvert -k latex www.geir.isene.com -d pdf www.ruby-lang.org'
+    This would convert my homepage to a latex file and keep the html file
+    as well. It would then go on to convert the Ruby homepage to pdf,
+    deleting the intermediate html file.
+
+    It is possible to convert one document to several formats like:
+    'htmlconvert text ps www.geir.isene.com'. 
+
+    By the way; 'htmlconvert www.geir.isene.com' is the same as
+    'www.geir.isene.com/index.php' (or whatever is the top level
+    document for the specific domain.
+
+  COPYRIGHT:
+      
+    Copyright 2002, Geir Isene (www.geir.isene.com)
+    This program is released under the GNU General Public lisence v2
+    For the full lisence text see: http://www.gnu.org/copyleft/gpl.html
+
+HELPTEXT
+end
+
+require "net/http"
+
+output = []
+output[0] = "txt"
+pdf = false
+ps = false
+keep = false
+i = -1
+
+ARGV.each do |arg|
+    i += 1
+    case arg
+        when "-h"
+            help
+            exit
+        when "-k"
+            keep = "true"
+        when "-d"
+            keep = "false"
+        when "ps"
+            output[i] = "ps"
+            ps = "true"
+        when "pdf"
+            output[i] = "ps"
+            pdf = true
+        when "latex"
+            output[i] = "latex"
+        when "txt"
+            output[i] = "txt"
+        when "text"
+            output[i] = "text"
+        else
+            i = -1
+            arg.gsub!(/http:\/\//, "")
+            arg += "/" unless arg.include?("/")
+            pat = /(.+?)(\/.*)/
+            httpget = pat.match(arg)
+            h = Net::HTTP::new(httpget[1], 80)
+            
+            begin
+                resp, data = h.get(httpget[2], nil)
+            rescue => errmsg
+                puts "Problem opening destination URL
+(#{arg}):\n#{errmsg}"
+                puts resp.code, resp.message unless resp.nil?
+                exit
+            end
+            
+            begin
+                fname = arg.gsub("/", "_")
+                htmlfile = fname + ".html"
+                File.delete(htmlfile) if FileTest.exist?(htmlfile)
+                File.open(htmlfile, File::CREAT|File::EXCL|File::RDWR,
+0644) do |fl|
+                    fl.write data
+                end
+            rescue => errmsg
+                puts "Error writing temporary htmlfile:\n#{errmsg}"
+                exit
+            end
+
+            output.each do |outp|
+                if outp == "ps"
+                    convert = "html2ps " + htmlfile + " > " + fname +
+".ps"
+                elsif outp == "latex"
+                    convert = "gnuhtml2latex -cp " + htmlfile
+                elsif outp == "txt"
+                    convert = "html2text -nobs -style compact " + htmlfile
++ " > " + fname + ".txt"
+                elsif outp == "text"
+                    convert = "html2text -style pretty " + htmlfile + " >
+" + fname + ".txt"
+                end
+
+                begin
+                    system convert
+                    puts convert
+                    if pdf && outp == "ps"
+                        psfile = fname + ".ps"
+                        convert2 = "ps2pdf " + psfile + " " + fname +
+".pdf"
+                        system convert2
+                        puts convert2
+                        File.delete(psfile) unless ps
+                    end
+                rescue => errmsg
+                    puts "Error in format conversion:\n#{errmsg}"
+                    exit
+                end
+            end
+
+            output = []
+            pdf = "false"
+            File.delete(htmlfile) unless keep
+            puts "Deleting #{htmlfile}" unless keep
+    end
+end
