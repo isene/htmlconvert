@@ -7,7 +7,7 @@ These utilities do the actual work; htmlconvert simply gives a common interface 
 
 **SYNOPSIS:**
 
-  htmlconvert [OPTION] [FORMAT] [URL] [OPTION] [FORMAT] [URL]...
+    htmlconvert [OPTION] [FORMAT] [URL] [OPTION] [FORMAT] [URL]...
 
 **OPTIONS:**
 
@@ -26,13 +26,14 @@ These utilities do the actual work; htmlconvert simply gives a common interface 
 	convert the html file to plain text (default)
 
     text
-        convert the html file to formatted text (for viewing with less and more)
+	convert the html file to formatted text 
+	(for viewing with less and more)
 
     latex
 	convert the html file to latex
 
     ps
-        convert the html file to postscript
+	convert the html file to postscript
 
     pdf
 	convert the html file to pdf
@@ -40,19 +41,26 @@ These utilities do the actual work; htmlconvert simply gives a common interface 
 **EXAMPLES:**
 
 By following the synopsis, one could simply convert my homepage to text:
-    ```htmlconvert isene.org/index.html```
+
+```htmlconvert isene.org/index.html```
 
 Or a more complex use could be:
-    ```htmlconvert -k latex isene.org -d pdf www.ruby-lang.org```
+
+```htmlconvert -k latex isene.org -d pdf www.ruby-lang.org```
   
 This would convert my homepage to a latex file and keep the html file as well. It would then go on to convert the Ruby homepage to pdf, deleting the intermediate html file.
 
 It is possible to convert one document to several formats like:
-    ```htmlconvert text ps isene.org```
+
+```htmlconvert text ps isene.org```
 
 By the way; 
-    ```htmlconvert isene.org```
+
+```htmlconvert isene.org```
+
 is the same as
-    ```isene.org/index.html```
+
+```isene.org/index.html```
+
 ...or whatever is the top level document for the specific domain.
 
