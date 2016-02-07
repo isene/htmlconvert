@@ -1,6 +1,8 @@
 # htmlconvert
 ## Converts html documents to plain text, formatted text, latex, ps or pdf
 
+This program is superseded by wkhtmltopdf (http://wkhtmltopdf.org/). Use the wkhtmltopdf instead as that provides much more functionality. I keep this project here for nostalgia - as it was my first Ruby program (even as it is now broken due to newer Ruby versions).
+
 This program requires the following to be installed on your system: Ruby as well as the utilities html2text, html2ps, ps2pdf and gnuhtml2latex.
 
 These utilities do the actual work; htmlconvert simply gives a common interface to all of them. It also makes it possible to convert several html documents to various formats all in one fell swoop.
