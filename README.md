@@ -66,3 +66,6 @@ is the same as
 
 ...or whatever is the top level document for the specific domain.
 
+## License
+This software is released into the Public Domain.
+
