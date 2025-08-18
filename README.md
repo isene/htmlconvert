@@ -1,4 +1,9 @@
 # htmlconvert
+
+[![License](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](https://unlicense.org/)
+[![GitHub stars](https://img.shields.io/github/stars/isene/htmlconvert.svg)](https://github.com/isene/htmlconvert/stargazers)
+[![Stay Amazing](https://img.shields.io/badge/Stay-Amazing-blue.svg)](https://isene.org)
+
 ## Converts html documents to plain text, formatted text, latex, ps or pdf
 
 This program is superseded by wkhtmltopdf (http://wkhtmltopdf.org/). Use the wkhtmltopdf instead as that provides much more functionality. I keep this project here for nostalgia - as it was my first Ruby program (even as it is now broken due to newer Ruby versions).
