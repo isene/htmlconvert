@@ -1,3 +1,5 @@
+<img src="img/htmlconvert_logo.svg" align="left" width="150" height="150" alt="HTML Converter Logo">
+
 # htmlconvert
 
 [![License](https://img.shields.io/badge/License-Public%20Domain-brightgreen.svg)](https://unlicense.org/)
