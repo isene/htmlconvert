@@ -5,6 +5,7 @@
 [![Stay Amazing](https://img.shields.io/badge/Stay-Amazing-blue.svg)](https://isene.org)
 
 <img src="img/htmlconvert_logo.svg" align="left" width="150" height="150" alt="HTML Converter Logo">
+<br clear="left"/>
 
 ## Converts html documents to plain text, formatted text, latex, ps or pdf
 
